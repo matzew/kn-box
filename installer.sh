@@ -29,9 +29,8 @@ function header_text {
   echo "$header$*$reset"
 }
 
-header_text             "Starting Knative on minikube!"
+header_text "Starting Knative on minikube!"
 header_text "Using Kubernetes Version:               ${kube_version}"
-header_text "Using Strimzi Version:                  ${strimzi_version}"
 header_text "Using Knative Serving Version:          ${serving_version}"
 header_text "Using Knative Eventing Version:         ${eventing_version}"
 header_text "Using Kourier Version:                  ${kourier_version}"
