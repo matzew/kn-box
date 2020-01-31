@@ -24,12 +24,12 @@ function header_text {
 header_text "Using Strimzi Version:                  ${strimzi_version}"
 
 header_text "Strimzi install"
-oc create namespace kafka
+kubectl create namespace kafka
 curl -L "https://github.com/strimzi/strimzi-kafka-operator/releases/download/${strimzi_version}/strimzi-cluster-operator-${strimzi_version}.yaml" \
   | sed 's/namespace: .*/namespace: kafka/' \
-  | oc -n kafka apply -f -
+  | kubectl -n kafka apply -f -
 
 header_text "Applying Strimzi Cluster file"
-oc -n kafka apply -f "https://raw.githubusercontent.com/strimzi/strimzi-kafka-operator/${strimzi_version}/examples/kafka/kafka-persistent-single.yaml"
+kubectl -n kafka apply -f "https://raw.githubusercontent.com/strimzi/strimzi-kafka-operator/${strimzi_version}/examples/kafka/kafka-persistent-single.yaml"
 header_text "Waiting for Strimzi to become ready"
-sleep 5; while echo && oc get pods -n kafka | grep -v -E "(Running|Completed|STATUS)"; do sleep 5; done
+sleep 5; while echo && kubectl get pods -n kafka | grep -v -E "(Running|Completed|STATUS)"; do sleep 5; done
