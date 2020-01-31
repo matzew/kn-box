@@ -34,7 +34,7 @@ header_text "Using Kubernetes Version:               ${kube_version}"
 header_text "Using Strimzi Version:                  ${strimzi_version}"
 header_text "Using Knative Serving Version:          ${serving_version}"
 header_text "Using Knative Eventing Version:         ${eventing_version}"
-header_text "Using Istio Version:                    ${istio_version}"
+header_text "Using Kourier Version:                  ${kourier_version}"
 
 minikube start --memory="${MEMORY:-12288}" --cpus="${CPUS:-8}" --kubernetes-version="${kube_version}" --vm-driver="${DRIVER:-kvm2}" --disk-size="${DISKSIZE:-30g}" --extra-config=apiserver.enable-admission-plugins="LimitRanger,NamespaceExists,NamespaceLifecycle,ResourceQuota,ServiceAccount,DefaultStorageClass,MutatingAdmissionWebhook"
 header_text "Waiting for core k8s services to initialize"
