@@ -23,7 +23,9 @@ function header_text {
 
 
 header_text "Setting up Knative Apache Kafka Source"
-kubectl apply --filename https://github.com/knative/eventing-contrib/releases/download/${eventing_version}/kafka-source.yaml
+curl -L https://github.com/knative/eventing-contrib/releases/download/${eventing_version}/kafka-source.yaml \
+  | sed 's/namespace: .*/namespace: knative-eventing/' \
+  | kubectl apply -f - -n knative-eventing
 
 header_text "Waiting for Knative Apache Kafka Source to become ready"
 sleep 5; while echo && kubectl get pods -n knative-sources | grep -v -E "(Running|Completed|STATUS)"; do sleep 5; done
