@@ -35,6 +35,8 @@ kn service create random --image rhuss/random:1.0
 curl -sH "Host: random.default.example.com" http://$ADDR | jq .
 ```
 
+_`kn` is the official CLI from the Knative project. Get it [here](https://github.com/knative/client/releases/latest)!_
+
 ## Apache Kafka
 
 If you want to experiment with Apache Kafka, install it using [Strimzi](https://strimzi.io):
