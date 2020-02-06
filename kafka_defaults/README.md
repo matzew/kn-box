@@ -1,17 +1,20 @@
-# Knative installation box
+# Knative Apache Kafka installation
 
-A collection of script to run Knative
+A to run Knative with Apache Kafka Source and Channel as default channels.
 
 ## Installer
 
 The installer gets you a minikube cluster, that runs:
 
+* Apache Kafka test cluster, using [Strimzi](https://strimzi.io)
 * Knative Serving CORE
 * Kourier Ingress
-* Knative Eventing CORE
+* Knative Eventing (No `InMemoryChannel`)
+* Knative Eventing components for Apache Kafka
+
 
 ```shell
-./01-installer.sh
+./kn-eventing-kafka.sh
 ```
 
 ### Accessing a service
@@ -36,21 +39,5 @@ curl -sH "Host: random.default.example.com" http://$ADDR | jq .
 ```
 
 _`kn` is the official CLI from the Knative project. Get it [here](https://github.com/knative/client/releases/latest)!_
-
-## Apache Kafka
-
-If you want to experiment with Apache Kafka, install it using [Strimzi](https://strimzi.io):
-
-```shell
-./02-strimzi.sh
-```
-
-## Knative components for Apache Kafka
-
-To install the `KafkaSource` and the `KafkaChannel` CRDs, run:
-
-```shell
-./03-kn-kafka.sh
-```
 
 Have fun!
