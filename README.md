@@ -14,6 +14,27 @@ The installer gets you a minikube cluster, that runs:
 ./installer.sh
 ```
 
+### Accessing a service
+
+To extract the host & port for accessing a Knative service via Minikube you can use the following expression:
+
+```
+$(minikube ip):$(kubectl get svc kourier --namespace kourier-system --output 'jsonpath={.spec.ports[?(@.port==80)].nodePort}')
+```
+
+For example:
+
+```
+# Get host:port for acessing a service
+ADDR=$(minikube ip):$(kubectl get svc kourier --namespace kourier-system --output 'jsonpath={.spec.ports[?(@.port==80)].nodePort}')
+
+# Create a sample service
+kn service create random --image rhuss/random:1.0
+
+# Access the Knative service
+curl -sH "Host: random.default.example.com" http://$ADDR | jq .
+```
+
 ## Apache Kafka
 
 If you want to experiment with Apache Kafka, install it using [Strimzi](https://strimzi.io):
