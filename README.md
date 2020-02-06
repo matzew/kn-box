@@ -16,7 +16,7 @@ The installer gets you a minikube cluster, that runs:
 
 ### Accessing a service
 
-TO extract the proper host & port for accessing a Knative service via Minikube use the following expression:
+To extract the host & port for accessing a Knative service via Minikube you can use the following expression:
 
 ```
 $(minikube ip):$(kubectl get svc kourier --namespace kourier-system --output 'jsonpath={.spec.ports[?(@.port==80)].nodePort}')
