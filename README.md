@@ -2,8 +2,13 @@
 
 A collection of script to run Knative
 
-## Installer
+## Out of the Box: Apache Kafka and Knative
 
+An opinionated package of Knative, Koruier, Apache Kafka and Strimzi can be found in `[this](ootb_kafka)` folder!
+
+## Modular Installers
+
+The root director contains a set of more fine-grained scripts, allowing you a modular setup.
 The installer gets you a minikube cluster, that runs:
 
 * Knative Serving CORE
@@ -52,5 +57,7 @@ To install the `KafkaSource` and the `KafkaChannel` CRDs, run:
 ```shell
 ./03-kn-kafka.sh
 ```
+
+> The `KafkaChannel` in this version is currently not configured to run as a default channel!
 
 Have fun!
