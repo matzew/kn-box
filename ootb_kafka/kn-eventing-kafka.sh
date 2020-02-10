@@ -72,10 +72,10 @@ sleep 5; while echo && kubectl get pods -n knative-serving | grep -v -E "(Runnin
 header_text "Setting up Kourier"
 kubectl apply -f "https://raw.githubusercontent.com/3scale/kourier/${kourier_version}/deploy/kourier-knative.yaml"
 
-header_text "Waiting for Knative Serving to become ready"
+header_text "Waiting for Kourier to become ready"
 sleep 5; while echo && kubectl get pods -n kourier-system | grep -v -E "(Running|Completed|STATUS)"; do sleep 5; done
 
-header_text "Configure Knative Serving to use the proper 'ingress.class'"
+header_text "Configure Knative Serving to use the proper 'ingress.class' from Kourier"
 kubectl patch configmap/config-network \
   -n knative-serving \
   --type merge \
