@@ -15,7 +15,7 @@ else
   reset=''
 fi
 
-eventing_version="v0.12.0"
+eventing_contrib_version="v0.12.4"
 
 function header_text {
   echo "$header$*$reset"
@@ -23,7 +23,7 @@ function header_text {
 
 
 header_text "Setting up Knative Apache Kafka Source"
-curl -L https://github.com/knative/eventing-contrib/releases/download/${eventing_version}/kafka-source.yaml \
+curl -L https://github.com/knative/eventing-contrib/releases/download/${eventing_contrib_version}/kafka-source.yaml \
   | sed 's/namespace: .*/namespace: knative-eventing/' \
   | kubectl apply -f - -n knative-eventing
 
@@ -31,7 +31,7 @@ header_text "Waiting for Knative Apache Kafka Source to become ready"
 sleep 5; while echo && kubectl get pods -n knative-sources | grep -v -E "(Running|Completed|STATUS)"; do sleep 5; done
 
 header_text "Setting up Knative Apache Kafka Channel"
-curl -L "https://github.com/knative/eventing-contrib/releases/download/${eventing_version}/kafka-channel.yaml" \
+curl -L "https://github.com/knative/eventing-contrib/releases/download/${eventing_contrib_version}/kafka-channel.yaml" \
     | sed 's/REPLACE_WITH_CLUSTER_URL/my-cluster-kafka-bootstrap.kafka:9092/' \
     | kubectl apply --filename -
 
