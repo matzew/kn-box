@@ -15,9 +15,9 @@ else
   reset=''
 fi
 
-serving_version="v0.12.0"
-eventing_version="v0.12.0"
-kourier_version="v0.3.8"
+serving_version="v0.13.0"
+eventing_version="v0.13.0"
+kourier_version="v0.3.10"
 kube_version="v1.17.2"
 
 MEMORY="$(minikube config view | awk '/memory/ { print $3 }')"
