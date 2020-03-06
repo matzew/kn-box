@@ -16,9 +16,9 @@ else
 fi
 
 serving_version="v0.13.0"
-eventing_version="v0.13.0"
+eventing_version="v0.13.1"
 kourier_version="v0.3.10"
-kube_version="v1.17.2"
+kube_version="v1.17.3"
 
 MEMORY="$(minikube config view | awk '/memory/ { print $3 }')"
 CPUS="$(minikube config view | awk '/cpus/ { print $3 }')"
