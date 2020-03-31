@@ -16,7 +16,7 @@ else
 fi
 
 serving_version="v0.13.0"
-eventing_version="v0.13.1"
+eventing_version="v0.13.4"
 kourier_version="v0.3.10"
 kube_version="v1.17.3"
 
