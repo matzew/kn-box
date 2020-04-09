@@ -15,10 +15,9 @@ else
   reset=''
 fi
 
-serving_version="v0.13.0"
-eventing_version="v0.13.4"
-kourier_version="v0.3.10"
-kube_version="v1.17.3"
+kube_version="v1.17.4"
+serving_version="v0.13.2"
+kourier_version="v0.3.12"
 
 MEMORY="$(minikube config view | awk '/memory/ { print $3 }')"
 CPUS="$(minikube config view | awk '/cpus/ { print $3 }')"
@@ -32,7 +31,6 @@ function header_text {
 header_text "Starting Knative on minikube!"
 header_text "Using Kubernetes Version:               ${kube_version}"
 header_text "Using Knative Serving Version:          ${serving_version}"
-header_text "Using Knative Eventing Version:         ${eventing_version}"
 header_text "Using Kourier Version:                  ${kourier_version}"
 
 minikube start --memory="${MEMORY:-12288}" --cpus="${CPUS:-8}" --kubernetes-version="${kube_version}" --vm-driver="${DRIVER:-kvm2}" --disk-size="${DISKSIZE:-30g}" --extra-config=apiserver.enable-admission-plugins="LimitRanger,NamespaceExists,NamespaceLifecycle,ResourceQuota,ServiceAccount,DefaultStorageClass,MutatingAdmissionWebhook"
@@ -64,9 +62,3 @@ kubectl patch configmap/config-network \
   --type merge \
   -p '{"data":{"clusteringress.class":"kourier.ingress.networking.knative.dev",
                "ingress.class":"kourier.ingress.networking.knative.dev"}}'
-
-header_text "Setting up Knative Eventing"
-kubectl apply --filename https://github.com/knative/eventing/releases/download/${eventing_version}/eventing.yaml
-
-header_text "Waiting for Knative Eventing to become ready"
-sleep 5; while echo && kubectl get pods -n knative-eventing | grep -v -E "(Running|Completed|STATUS)"; do sleep 5; done
