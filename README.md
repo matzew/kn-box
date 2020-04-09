@@ -13,10 +13,17 @@ The installer gets you a minikube cluster, that runs:
 
 * Knative Serving CORE
 * Kourier Ingress
-* Knative Eventing CORE
 
 ```shell
 ./01-installer.sh
+```
+
+### Knative Eventing
+
+To install the Knative Eventing components to the cluster invoke:
+
+```shell
+./02-kn-eventing.sh
 ```
 
 ### Accessing a service
@@ -47,7 +54,7 @@ _`kn` is the official CLI from the Knative project. Get it [here](https://github
 If you want to experiment with Apache Kafka, install it using [Strimzi](https://strimzi.io):
 
 ```shell
-./02-strimzi.sh
+./03-strimzi.sh
 ```
 
 ## Knative components for Apache Kafka
