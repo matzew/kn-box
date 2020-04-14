@@ -15,7 +15,7 @@ else
   reset=''
 fi
 
-kube_version="v1.17.4"
+kube_version="v1.18.1"
 serving_version="v0.13.2"
 kourier_version="v0.3.12"
 
