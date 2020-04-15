@@ -16,8 +16,8 @@ else
 fi
 
 kube_version="v1.18.1"
-serving_version="v0.13.2"
-kourier_version="v0.3.12"
+serving_version="v0.14.0"
+kourier_version="v0.14.0"
 
 MEMORY="$(minikube config view | awk '/memory/ { print $3 }')"
 CPUS="$(minikube config view | awk '/cpus/ { print $3 }')"
@@ -51,7 +51,7 @@ header_text "Waiting for Knative Serving to become ready"
 sleep 5; while echo && kubectl get pods -n knative-serving | grep -v -E "(Running|Completed|STATUS)"; do sleep 5; done
 
 header_text "Setting up Kourier"
-kubectl apply -f "https://raw.githubusercontent.com/3scale/kourier/${kourier_version}/deploy/kourier-knative.yaml"
+kubectl apply -f "https://github.com/knative/net-kourier/releases/download/${kourier_version}/kourier.yaml"
 
 header_text "Waiting for Kourier to become ready"
 sleep 5; while echo && kubectl get pods -n kourier-system | grep -v -E "(Running|Completed|STATUS)"; do sleep 5; done
