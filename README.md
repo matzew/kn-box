@@ -62,9 +62,19 @@ If you want to experiment with Apache Kafka, install it using [Strimzi](https://
 To install the `KafkaSource` and the `KafkaChannel` CRDs, run:
 
 ```shell
-./03-kn-kafka.sh
+./04-kn-kafka.sh
 ```
 
 > The `KafkaChannel` in this version is currently not configured to run as a default channel!
+
+## Enabling tracing
+
+If you want, you can install zipkin and configure it for Knative Eventing to read event traces:
+
+```shell
+./optional-tracing.sh
+```
+
+> Be aware to configure tracing after you configured all the other components
 
 Have fun!
