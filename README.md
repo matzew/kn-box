@@ -9,13 +9,18 @@ An opinionated package of Knative, Koruier, Apache Kafka and Strimzi can be foun
 ## Modular Installers
 
 The root director contains a set of more fine-grained scripts, allowing you a modular setup.
-The installer gets you a minikube cluster, that runs:
-
-* Knative Serving CORE
-* Kourier Ingress
+The installer gets you a minikube cluster:
 
 ```shell
-./01-installer.sh
+./00-installer.sh
+```
+
+### Knative Serving
+
+To install the Knative Knative Serving with Kourier Ingress to the cluster invoke:
+
+```shell
+./01-kn-serving.sh
 ```
 
 ### Knative Eventing
