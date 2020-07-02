@@ -15,12 +15,12 @@ else
   reset=''
 fi
 
-kube_version="v1.17.2"
+kube_version="v1.18.4"
 strimzi_version=`curl https://github.com/strimzi/strimzi-kafka-operator/releases/latest |  awk -F 'tag/' '{print $2}' | awk -F '"' '{print $1}' 2>/dev/null`
-serving_version="v0.12.0"
-eventing_version="v0.12.0"
-eventing_contrib_version="v0.12.2"
-kourier_version="v0.3.8"
+serving_version="v0.15.2"
+kourier_version="v0.15.0"
+eventing_version="v0.15.2"
+eventing_contrib_version="v0.15.1"
 
 
 MEMORY="$(minikube config view | awk '/memory/ { print $3 }')"
@@ -70,7 +70,7 @@ header_text "Waiting for Knative Serving to become ready"
 sleep 5; while echo && kubectl get pods -n knative-serving | grep -v -E "(Running|Completed|STATUS)"; do sleep 5; done
 
 header_text "Setting up Kourier"
-kubectl apply -f "https://raw.githubusercontent.com/3scale/kourier/${kourier_version}/deploy/kourier-knative.yaml"
+kubectl apply -f "https://github.com/knative/net-kourier/releases/download/${kourier_version}/kourier.yaml"
 
 header_text "Waiting for Kourier to become ready"
 sleep 5; while echo && kubectl get pods -n kourier-system | grep -v -E "(Running|Completed|STATUS)"; do sleep 5; done
@@ -83,8 +83,7 @@ kubectl patch configmap/config-network \
                "ingress.class":"kourier.ingress.networking.knative.dev"}}'
 
 header_text "Setting up Knative Eventing"
-kubectl apply --filename https://storage.googleapis.com/knative-nightly/eventing/latest/eventing-core.yaml
-#https://github.com/knative/eventing/releases/download/${eventing_version}/eventing-core.yaml
+kubectl apply --filename https://github.com/knative/eventing/releases/download/${eventing_version}/eventing.yaml
 
 header_text "Waiting for Knative Eventing to become ready"
 sleep 5; while echo && kubectl get pods -n knative-eventing | grep -v -E "(Running|Completed|STATUS)"; do sleep 5; done
@@ -120,4 +119,16 @@ data:
       spec:
         numPartitions: 3
         replicationFactor: 1
+EOF
+
+cat <<-EOF | kubectl apply -f -
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config-br-default-channel
+  namespace: knative-eventing
+data:
+  channelTemplateSpec: |
+    apiVersion: messaging.knative.dev/v1alpha1
+    kind: KafkaChannel
 EOF
