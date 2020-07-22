@@ -15,12 +15,12 @@ else
   reset=''
 fi
 
-kube_version="v1.18.4"
+kube_version="v1.18.6"
 strimzi_version=`curl https://github.com/strimzi/strimzi-kafka-operator/releases/latest |  awk -F 'tag/' '{print $2}' | awk -F '"' '{print $1}' 2>/dev/null`
-serving_version="v0.15.2"
-kourier_version="v0.15.0"
-eventing_version="v0.15.2"
-eventing_contrib_version="v0.15.1"
+serving_version="v0.16.0"
+kourier_version="v0.16.0"
+eventing_version="v0.16.1"
+eventing_contrib_version="v0.16.0"
 
 
 MEMORY="$(minikube config view | awk '/memory/ { print $3 }')"
@@ -116,7 +116,7 @@ data:
   # Configuration for defaulting channels that do not specify CRD implementations.
   default-ch-config: |
     clusterDefault:
-      apiVersion: messaging.knative.dev/v1alpha1
+      apiVersion: messaging.knative.dev/v1beta1
       kind: KafkaChannel
       spec:
         numPartitions: 3
@@ -131,6 +131,6 @@ metadata:
   namespace: knative-eventing
 data:
   channelTemplateSpec: |
-    apiVersion: messaging.knative.dev/v1alpha1
+    apiVersion: messaging.knative.dev/v1beta1
     kind: KafkaChannel
 EOF
