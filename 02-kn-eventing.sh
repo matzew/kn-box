@@ -15,7 +15,7 @@ else
   reset=''
 fi
 
-eventing_version="v0.16.1"
+eventing_version="v0.17.1"
 
 function header_text {
   echo "$header$*$reset"
