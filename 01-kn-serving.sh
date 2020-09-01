@@ -15,7 +15,7 @@ else
   reset=''
 fi
 
-serving_version="v0.17.0"
+serving_version="v0.17.2"
 kourier_version="v0.17.0"
 
 function header_text {
