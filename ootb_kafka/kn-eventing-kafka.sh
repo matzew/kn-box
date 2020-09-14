@@ -15,32 +15,24 @@ else
   reset=''
 fi
 
-kube_version="v1.18.6"
 strimzi_version=`curl https://github.com/strimzi/strimzi-kafka-operator/releases/latest |  awk -F 'tag/' '{print $2}' | awk -F '"' '{print $1}' 2>/dev/null`
-serving_version="v0.16.0"
-kourier_version="v0.16.0"
-eventing_version="v0.16.1"
-eventing_contrib_version="v0.16.0"
-
-
-MEMORY="$(minikube config view | awk '/memory/ { print $3 }')"
-CPUS="$(minikube config view | awk '/cpus/ { print $3 }')"
-DISKSIZE="$(minikube config view | awk '/disk-size/ { print $3 }')"
-DRIVER="$(minikube config view | awk '/vm-driver/ { print $3 }')"
+serving_version="v0.17.2"
+kourier_version="v0.17.1"
+eventing_version="v0.17.3"
+eventing_contrib_version="v0.17.1"
 
 function header_text {
   echo "$header$*$reset"
 }
 
-header_text "Starting Knative on minikube!"
-header_text "Using Kubernetes Version:                   ${kube_version}"
+header_text "Starting Knative on kind!"
 header_text "Using Strimzi Version:                      ${strimzi_version}"
 header_text "Using Knative Serving Version:              ${serving_version}"
 header_text "Using Kourier Version:                      ${kourier_version}"
 header_text "Using Knative Eventing Version:             ${eventing_version}"
 header_text "Using Knative Eventing Contrib Version:     ${eventing_contrib_version}"
 
-minikube start --memory="${MEMORY:-12288}" --cpus="${CPUS:-8}" --kubernetes-version="${kube_version}" --vm-driver="${DRIVER:-kvm2}" --disk-size="${DISKSIZE:-30g}" --extra-config=apiserver.enable-admission-plugins="LimitRanger,NamespaceExists,NamespaceLifecycle,ResourceQuota,ServiceAccount,DefaultStorageClass,MutatingAdmissionWebhook"
+kind create cluster
 header_text "Waiting for core k8s services to initialize"
 sleep 5; while echo && kubectl get pods -n kube-system | grep -v -E "(Running|Completed|STATUS)"; do sleep 5; done
 
