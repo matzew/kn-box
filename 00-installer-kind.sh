@@ -15,14 +15,11 @@ else
   reset=''
 fi
 
-kube_version="v1.18.3"
-
 function header_text {
   echo "$header$*$reset"
 }
 
 header_text "Starting Knative on kind!"
-header_text "Using Kubernetes Version:               ${kube_version}"
 
 kind create cluster
 header_text "Waiting for core k8s services to initialize"
