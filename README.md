@@ -4,16 +4,18 @@ A collection of script to run Knative
 
 ## Out of the Box: Apache Kafka and Knative
 
-An opinionated package of Knative, Koruier, Apache Kafka and Strimzi can be found in `[this](ootb_kafka)` folder!
+An opinionated package of Knative, Koruier, Apache Kafka and Strimzi can be found in [this](ootb_kafka) folder!
 
 ## Modular Installers
 
 The root director contains a set of more fine-grained scripts, allowing you a modular setup.
-The installer gets you a minikube cluster:
+The installer gets you a minikube/kind cluster:
 
 ```shell
-./00-installer.sh
+./00-installer(kind).sh
 ```
+
+_**NOTE:** The scripts for the Knative components work against any Kubernetes cluster!_ 
 
 ### Knative Serving
 
