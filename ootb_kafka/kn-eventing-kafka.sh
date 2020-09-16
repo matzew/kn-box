@@ -19,22 +19,17 @@ strimzi_version=`curl https://github.com/strimzi/strimzi-kafka-operator/releases
 serving_version="v0.17.2"
 kourier_version="v0.17.1"
 eventing_version="v0.17.3"
-eventing_contrib_version="v0.17.1"
+eventing_contrib_version="v0.17.2"
 
 function header_text {
   echo "$header$*$reset"
 }
 
-header_text "Starting Knative on kind!"
 header_text "Using Strimzi Version:                      ${strimzi_version}"
 header_text "Using Knative Serving Version:              ${serving_version}"
 header_text "Using Kourier Version:                      ${kourier_version}"
 header_text "Using Knative Eventing Version:             ${eventing_version}"
 header_text "Using Knative Eventing Contrib Version:     ${eventing_contrib_version}"
-
-kind create cluster
-header_text "Waiting for core k8s services to initialize"
-sleep 5; while echo && kubectl get pods -n kube-system | grep -v -E "(Running|Completed|STATUS)"; do sleep 5; done
 
 header_text "Strimzi install"
 kubectl create namespace kafka
