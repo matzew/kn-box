@@ -4,7 +4,11 @@ A to run Knative with Apache Kafka Source and Channel as default channels.
 
 ## Installer
 
-The installer gets you a minikube cluster, that runs:
+Use the `00-installer*` scripts for either _minikube_ or _kind_.
+
+## Knative Kafka pack:
+
+The script gets you an installation, that runs:
 
 * Apache Kafka test cluster, using [Strimzi](https://strimzi.io)
 * Knative Serving CORE
@@ -12,6 +16,9 @@ The installer gets you a minikube cluster, that runs:
 * Knative Eventing (No `InMemoryChannel`)
 * Knative Eventing components for Apache Kafka
 
+The `KafkaChannel` is used as the default channel, including for the MT Knative Broker.
+
+Run it:
 
 ```shell
 ./kn-eventing-kafka.sh
