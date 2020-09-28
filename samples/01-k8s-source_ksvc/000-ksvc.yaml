@@ -1,0 +1,9 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: k8s-display
+spec:
+  template:
+    spec:
+      containers:
+      - image: quay.io/openshift-knative/knative-eventing-sources-event-display
