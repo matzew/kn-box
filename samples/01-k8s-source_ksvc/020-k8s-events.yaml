@@ -1,0 +1,16 @@
+apiVersion: sources.knative.dev/v1beta1
+kind: ApiServerSource
+metadata:
+  name: testevents
+  namespace: default
+spec:
+  serviceAccountName: events-sa
+  mode: Resource
+  resources:
+  - apiVersion: v1
+    kind: Event
+  sink:
+    ref:
+      apiVersion: serving.knative.dev/v1
+      kind: Service
+      name: k8s-display
