@@ -19,7 +19,7 @@ strimzi_version=`curl https://github.com/strimzi/strimzi-kafka-operator/releases
 serving_version="v0.18.0"
 kourier_version="v0.18.0"
 eventing_version="v0.18.0"
-eventing_contrib_version="v0.17.4"
+eventing_contrib_version="v0.18.0"
 
 function header_text {
   echo "$header$*$reset"
