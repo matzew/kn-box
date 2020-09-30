@@ -15,12 +15,13 @@ else
   reset=''
 fi
 
-eventing_contrib_version="v0.17.3"
+eventing_contrib_version="v0.17.4"
 
 function header_text {
   echo "$header$*$reset"
 }
 
+header_text "Using Knative Kafka Eventing Version:         ${eventing_contrib_version}"
 
 header_text "Setting up Knative Apache Kafka Source"
 curl -L https://github.com/knative/eventing-contrib/releases/download/${eventing_contrib_version}/kafka-source.yaml \

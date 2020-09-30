@@ -16,10 +16,10 @@ else
 fi
 
 strimzi_version=`curl https://github.com/strimzi/strimzi-kafka-operator/releases/latest |  awk -F 'tag/' '{print $2}' | awk -F '"' '{print $1}' 2>/dev/null`
-serving_version="v0.17.3"
-kourier_version="v0.17.2"
-eventing_version="v0.17.4"
-eventing_contrib_version="v0.17.3"
+serving_version="v0.18.0"
+kourier_version="v0.18.0"
+eventing_version="v0.18.0"
+eventing_contrib_version="v0.17.4"
 
 function header_text {
   echo "$header$*$reset"
