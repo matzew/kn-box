@@ -15,8 +15,8 @@ else
   reset=''
 fi
 
-serving_version="v0.17.3"
-kourier_version="v0.17.2"
+serving_version="v0.18.0"
+kourier_version="v0.18.0"
 
 function header_text {
   echo "$header$*$reset"
