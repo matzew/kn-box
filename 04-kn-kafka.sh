@@ -29,7 +29,7 @@ curl -L https://github.com/knative/eventing-contrib/releases/download/${eventing
   | kubectl apply -f - -n knative-eventing
 
 header_text "Waiting for Knative Apache Kafka Source to become ready"
-sleep 5; while echo && kubectl get pods -n knative-sources | grep -v -E "(Running|Completed|STATUS)"; do sleep 5; done
+kubectl wait deployment --all --timeout=-1s --for=condition=Available -n knative-eventing
 
 header_text "Setting up Knative Apache Kafka Channel"
 curl -L "https://github.com/knative/eventing-contrib/releases/download/${eventing_contrib_version}/kafka-channel.yaml" \
@@ -37,4 +37,4 @@ curl -L "https://github.com/knative/eventing-contrib/releases/download/${eventin
     | kubectl apply --filename -
 
 header_text "Waiting for Knative Apache Kafka Channel to become ready"
-sleep 5; while echo && kubectl get pods -n knative-eventing | grep -v -E "(Running|Completed|STATUS)"; do sleep 5; done
+kubectl wait deployment --all --timeout=-1s --for=condition=Available -n knative-eventing

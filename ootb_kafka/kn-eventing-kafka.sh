@@ -18,7 +18,7 @@ fi
 strimzi_version=`curl https://github.com/strimzi/strimzi-kafka-operator/releases/latest |  awk -F 'tag/' '{print $2}' | awk -F '"' '{print $1}' 2>/dev/null`
 serving_version="v0.18.0"
 kourier_version="v0.18.0"
-eventing_version="v0.18.0"
+eventing_version="v0.18.1"
 eventing_contrib_version="v0.18.0"
 
 function header_text {
@@ -33,16 +33,15 @@ header_text "Using Knative Eventing Contrib Version:     ${eventing_contrib_vers
 
 header_text "Strimzi install"
 kubectl create namespace kafka
+kubectl -n kafka apply --selector strimzi.io/crd-install=true -f https://github.com/strimzi/strimzi-kafka-operator/releases/download/${strimzi_version}/strimzi-cluster-operator-${strimzi_version}.yaml
 curl -L "https://github.com/strimzi/strimzi-kafka-operator/releases/download/${strimzi_version}/strimzi-cluster-operator-${strimzi_version}.yaml" \
   | sed 's/namespace: .*/namespace: kafka/' \
   | kubectl -n kafka apply -f -
-sleep 5; while echo && kubectl get pods -n kafka | grep -v -E "(Running|Completed|STATUS)"; do sleep 5; done
 
 header_text "Applying Strimzi Cluster file"
 kubectl -n kafka apply -f "https://raw.githubusercontent.com/strimzi/strimzi-kafka-operator/${strimzi_version}/examples/kafka/kafka-persistent-single.yaml"
-
 header_text "Waiting for Strimzi to become ready"
-sleep 15; while echo && kubectl get pods -n kafka | grep -v -E "my-cluster-kafka-0" | grep -v -E "(Running|Completed|STATUS)"; do sleep 15; done
+kubectl wait deployment --all --timeout=-1s --for=condition=Available -n kafka
 
 header_text "Setting up Knative Serving"
 
@@ -55,13 +54,13 @@ header_text "Setting up Knative Serving"
    done
 
 header_text "Waiting for Knative Serving to become ready"
-sleep 5; while echo && kubectl get pods -n knative-serving | grep -v -E "(Running|Completed|STATUS)"; do sleep 5; done
+kubectl wait deployment --all --timeout=-1s --for=condition=Available -n knative-serving
 
 header_text "Setting up Kourier"
 kubectl apply -f "https://github.com/knative/net-kourier/releases/download/${kourier_version}/kourier.yaml"
 
 header_text "Waiting for Kourier to become ready"
-sleep 5; while echo && kubectl get pods -n kourier-system | grep -v -E "(Running|Completed|STATUS)"; do sleep 5; done
+kubectl wait deployment --all --timeout=-1s --for=condition=Available -n kourier-system
 
 header_text "Configure Knative Serving to use the proper 'ingress.class' from Kourier"
 kubectl patch configmap/config-network \
@@ -72,10 +71,11 @@ kubectl patch configmap/config-network \
 
 header_text "Setting up Knative Eventing"
 kubectl apply --filename https://github.com/knative/eventing/releases/download/${eventing_version}/eventing-core.yaml
+kubectl apply --filename https://github.com/knative/eventing/releases/download/${eventing_version}/eventing-sugar-controller.yaml
 kubectl apply --filename https://github.com/knative/eventing/releases/download/${eventing_version}/mt-channel-broker.yaml
 
 header_text "Waiting for Knative Eventing to become ready"
-sleep 5; while echo && kubectl get pods -n knative-eventing | grep -v -E "(Running|Completed|STATUS)"; do sleep 5; done
+kubectl wait deployment --all --timeout=-1s --for=condition=Available -n knative-eventing
 
 header_text "Setting up Knative Apache Kafka Source"
 curl -L https://github.com/knative/eventing-contrib/releases/download/${eventing_contrib_version}/kafka-source.yaml \
@@ -83,7 +83,7 @@ curl -L https://github.com/knative/eventing-contrib/releases/download/${eventing
   | kubectl apply -f - -n knative-eventing
 
 header_text "Waiting for Knative Apache Kafka Source to become ready"
-sleep 5; while echo && kubectl get pods -n knative-sources | grep -v -E "(Running|Completed|STATUS)"; do sleep 5; done
+kubectl wait deployment --all --timeout=-1s --for=condition=Available -n knative-eventing
 
 header_text "Setting up Knative Apache Kafka Channel"
 curl -L "https://github.com/knative/eventing-contrib/releases/download/${eventing_contrib_version}/kafka-channel.yaml" \
@@ -91,7 +91,7 @@ curl -L "https://github.com/knative/eventing-contrib/releases/download/${eventin
     | kubectl apply --filename -
 
 header_text "Waiting for Knative Apache Kafka Channel to become ready"
-sleep 5; while echo && kubectl get pods -n knative-eventing | grep -v -E "(Running|Completed|STATUS)"; do sleep 5; done
+kubectl wait deployment --all --timeout=-1s --for=condition=Available -n knative-eventing
 
 cat <<-EOF | kubectl apply -f -
 apiVersion: v1
