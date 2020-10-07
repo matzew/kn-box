@@ -36,13 +36,13 @@ header_text "Setting up Knative Serving"
    done
 
 header_text "Waiting for Knative Serving to become ready"
-sleep 5; while echo && kubectl get pods -n knative-serving | grep -v -E "(Running|Completed|STATUS)"; do sleep 5; done
+kubectl wait deployment --all --timeout=-1s --for=condition=Available -n knative-serving
 
 header_text "Setting up Kourier"
 kubectl apply -f "https://github.com/knative/net-kourier/releases/download/${kourier_version}/kourier.yaml"
 
 header_text "Waiting for Kourier to become ready"
-sleep 5; while echo && kubectl get pods -n kourier-system | grep -v -E "(Running|Completed|STATUS)"; do sleep 5; done
+kubectl wait deployment --all --timeout=-1s --for=condition=Available -n kourier-system
 
 header_text "Configure Knative Serving to use the proper 'ingress.class' from Kourier"
 kubectl patch configmap/config-network \

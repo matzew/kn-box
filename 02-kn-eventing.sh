@@ -15,7 +15,7 @@ else
   reset=''
 fi
 
-eventing_version="v0.18.0"
+eventing_version="v0.18.1"
 
 function header_text {
   echo "$header$*$reset"
@@ -25,7 +25,7 @@ header_text "Using Knative Eventing Version:         ${eventing_version}"
 
 header_text "Setting up Knative Eventing"
 kubectl apply --filename https://github.com/knative/eventing/releases/download/${eventing_version}/eventing.yaml
-kubectl apply --filename https://storage.googleapis.com/knative-releases/eventing/previous/${eventing_version}/eventing-sugar-controller.yaml
+kubectl apply --filename https://github.com/knative/eventing/releases/download/${eventing_version}/eventing-sugar-controller.yaml
 
 header_text "Waiting for Knative Eventing to become ready"
-sleep 5; while echo && kubectl get pods -n knative-eventing | grep -v -E "(Running|Completed|STATUS)"; do sleep 5; done
+kubectl wait deployment --all --timeout=-1s --for=condition=Available -n knative-eventing

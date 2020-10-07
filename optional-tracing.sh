@@ -71,7 +71,8 @@ spec:
 ---
 EOF
 
-sleep 5; while echo && kubectl get pods -n zipkin | grep -v -E "(Running|Completed|STATUS)"; do sleep 5; done
+kubectl wait deployment --all --timeout=-1s --for=condition=Available -n zipkin
+
 
 header_text "Configuring Zipkin for eventing"
 
