@@ -20,6 +20,7 @@ serving_version="v0.18.0"
 kourier_version="v0.18.0"
 eventing_version="v0.18.1"
 eventing_contrib_version="v0.18.0"
+eventing_kafka_broker_version="v0.18.1"
 
 function header_text {
   echo "$header$*$reset"
@@ -30,6 +31,7 @@ header_text "Using Knative Serving Version:              ${serving_version}"
 header_text "Using Kourier Version:                      ${kourier_version}"
 header_text "Using Knative Eventing Version:             ${eventing_version}"
 header_text "Using Knative Eventing Contrib Version:     ${eventing_contrib_version}"
+header_text "Using Knative Eventing Kafka Version:       ${eventing_kafka_broker_version}"
 
 header_text "Strimzi install"
 kubectl create namespace kafka
@@ -72,10 +74,45 @@ kubectl patch configmap/config-network \
 header_text "Setting up Knative Eventing"
 kubectl apply --filename https://github.com/knative/eventing/releases/download/${eventing_version}/eventing-core.yaml
 kubectl apply --filename https://github.com/knative/eventing/releases/download/${eventing_version}/eventing-sugar-controller.yaml
-kubectl apply --filename https://github.com/knative/eventing/releases/download/${eventing_version}/mt-channel-broker.yaml
 
 header_text "Waiting for Knative Eventing to become ready"
 kubectl wait deployment --all --timeout=-1s --for=condition=Available -n knative-eventing
+
+
+header_text "Setting up Knative Kafka Broker"
+kubectl apply --filename https://github.com/knative-sandbox/eventing-kafka-broker/releases/download/${eventing_kafka_broker_version}/eventing-kafka-controller.yaml
+kubectl apply --filename https://github.com/knative-sandbox/eventing-kafka-broker/releases/download/${eventing_kafka_broker_version}/eventing-kafka-broker.yaml
+header_text "Waiting for Knative Kafka Broker to become ready"
+kubectl wait deployment --all --timeout=-1s --for=condition=Available -n knative-eventing
+
+## Setting the Kafka broker as default:
+cat <<-EOF | kubectl apply -f -
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kafka-broker-config
+  namespace: knative-eventing
+data:
+  default.topic.partitions: "10"
+  default.topic.replication.factor: "1"
+  bootstrap.servers: "my-cluster-kafka-bootstrap.kafka:9092"
+EOF
+
+cat <<-EOF | kubectl apply -f -
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config-br-defaults
+  namespace: knative-eventing
+data:
+  default-br-config: |
+    clusterDefault:
+      brokerClass: Kafka
+      apiVersion: v1
+      kind: ConfigMap
+      name: kafka-broker-config
+      namespace: knative-eventing
+EOF
 
 header_text "Setting up Knative Apache Kafka Source"
 curl -L https://github.com/knative/eventing-contrib/releases/download/${eventing_contrib_version}/kafka-source.yaml \
