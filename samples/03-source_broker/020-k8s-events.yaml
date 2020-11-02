@@ -1,0 +1,15 @@
+apiVersion: sources.knative.dev/v1alpha2
+kind: ApiServerSource
+metadata:
+  name: k8s-source-broker
+spec:
+  serviceAccountName: events-sa
+  mode: Resource
+  resources:
+  - apiVersion: v1
+    kind: Event
+  sink:
+    ref:
+      apiVersion: eventing.knative.dev/v1
+      kind: Broker
+      name: my-broker
