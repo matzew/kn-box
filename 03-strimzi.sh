@@ -36,4 +36,4 @@ kubectl wait crd --timeout=-1s kafkas.kafka.strimzi.io --for=condition=Establish
 header_text "Applying Strimzi Cluster file"
 kubectl -n kafka apply -f "https://raw.githubusercontent.com/strimzi/strimzi-kafka-operator/${strimzi_version}/examples/kafka/kafka-persistent-single.yaml"
 header_text "Waiting for Strimzi to become ready"
-kubectl wait deployment --all --timeout=-1s --for=condition=Available -n kafka
+kubectl wait kafka --all --timeout=-1s --for=condition=Ready -n kafka
