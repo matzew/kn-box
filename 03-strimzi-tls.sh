@@ -40,7 +40,6 @@ header_text "Waiting for Strimzi to become ready"
 kubectl wait kafka --all --timeout=-1s --for=condition=Ready -n kafka
 
 header_text "Applying Strimzi User"
-
 cat <<-EOF | kubectl -n kafka apply -f -
 apiVersion: kafka.strimzi.io/v1beta1
 kind: KafkaUser
@@ -87,3 +86,16 @@ spec:
         operation: Describe
         host: "*"
 EOF
+
+kubectl wait KafkaUser --all --timeout=-1s --for=condition=Ready -n kafka
+header_text "Waiting for Strimzi to become ready"
+
+header_text "Creating a Secret, containing TLS from Strimzi"
+STRIMZI_CRT=$(k -n kafka get secret my-cluster-cluster-ca-cert --template='{{index .data "ca.crt"}}' | base64 --decode )
+TLSUSER_CRT=$(k -n kafka get secret my-user --template='{{index .data "user.crt"}}' | base64 --decode )
+TLSUSER_KEY=$(k -n kafka get secret my-user --template='{{index .data "user.key"}}' | base64 --decode )
+
+kubectl create secret --namespace default generic my-tls-secret \
+    --from-literal=ca.crt="$STRIMZI_CRT" \
+    --from-literal=user.crt="$TLSUSER_CRT" \
+    --from-literal=user.key="$TLSUSER_KEY"
