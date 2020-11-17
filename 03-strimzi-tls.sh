@@ -41,7 +41,7 @@ kubectl wait kafka --all --timeout=-1s --for=condition=Ready -n kafka
 
 header_text "Applying Strimzi User"
 
-cat <<-EOF | kubectl apply -f -
+cat <<-EOF | kubectl -n kafka apply -f -
 apiVersion: kafka.strimzi.io/v1beta1
 kind: KafkaUser
 metadata:
