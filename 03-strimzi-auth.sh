@@ -187,9 +187,9 @@ header_text "Waiting for Strimzi Users to become ready"
 sleep 10
 
 header_text "Creating a Secret, containing TLS from Strimzi"
-STRIMZI_CRT=$(k -n kafka get secret my-cluster-cluster-ca-cert --template='{{index .data "ca.crt"}}' | base64 --decode )
-TLSUSER_CRT=$(k -n kafka get secret my-tls-user --template='{{index .data "user.crt"}}' | base64 --decode )
-TLSUSER_KEY=$(k -n kafka get secret my-tls-user --template='{{index .data "user.key"}}' | base64 --decode )
+STRIMZI_CRT=$(kubectl -n kafka get secret my-cluster-cluster-ca-cert --template='{{index .data "ca.crt"}}' | base64 --decode )
+TLSUSER_CRT=$(kubectl -n kafka get secret my-tls-user --template='{{index .data "user.crt"}}' | base64 --decode )
+TLSUSER_KEY=$(kubectl -n kafka get secret my-tls-user --template='{{index .data "user.key"}}' | base64 --decode )
 
 kubectl create secret --namespace default generic my-tls-secret \
     --from-literal=ca.crt="$STRIMZI_CRT" \
@@ -197,7 +197,7 @@ kubectl create secret --namespace default generic my-tls-secret \
     --from-literal=user.key="$TLSUSER_KEY"
 
 header_text "Creating a Secret, containing SASL from Strimzi"
-SASL_PASSWD=$(k -n kafka get secret my-sasl-user --template='{{index .data "password"}}' | base64 --decode )
+SASL_PASSWD=$(kubectl -n kafka get secret my-sasl-user --template='{{index .data "password"}}' | base64 --decode )
 kubectl create secret --namespace default generic my-sasl-secret \
     --from-literal=password="$SASL_PASSWD" \
     --from-literal=user="my-sasl-user"
