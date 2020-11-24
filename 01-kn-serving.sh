@@ -18,6 +18,25 @@ fi
 serving_version="v0.19.0"
 kourier_version="v0.19.0"
 
+serving_url=https://github.com/knative/serving/releases/download/${serving_version}
+kourier_url=https://github.com/knative/net-kourier/releases/download/${kourier_version}
+
+while [[ $# -ne 0 ]]; do
+   parameter=$1
+   case ${parameter} in
+     --nightly)
+        nightly=1
+        serving_version=nightly
+        serving_url=https://knative-nightly.storage.googleapis.com/serving/latest
+        kourier_version=nightly
+        kourier_url=https://knative-nightly.storage.googleapis.com/net-kourier/latest
+       ;;
+     *) abort "unknown option ${parameter}" ;;
+   esac
+   shift
+ done
+
+
 function header_text {
   echo "$header$*$reset"
 }
@@ -30,7 +49,7 @@ header_text "Setting up Knative Serving"
  n=0
    until [ $n -ge 2 ]
    do
-      kubectl apply --filename https://github.com/knative/serving/releases/download/${serving_version}/serving-core.yaml && break
+      kubectl apply --filename $serving_url/serving-core.yaml && break
       n=$[$n+1]
       sleep 5
    done
@@ -39,7 +58,7 @@ header_text "Waiting for Knative Serving to become ready"
 kubectl wait deployment --all --timeout=-1s --for=condition=Available -n knative-serving
 
 header_text "Setting up Kourier"
-kubectl apply -f "https://github.com/knative/net-kourier/releases/download/${kourier_version}/kourier.yaml"
+kubectl apply -f $kourier_url/kourier.yaml
 
 header_text "Waiting for Kourier to become ready"
 kubectl wait deployment --all --timeout=-1s --for=condition=Available -n kourier-system
