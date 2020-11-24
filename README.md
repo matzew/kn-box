@@ -37,7 +37,7 @@ To install the Knative Eventing components to the cluster invoke:
 ```
 
 This installs the latest released version of Knative eventing.
-If you want to install the latest nightly build, use option `--nightly` (i.e. `./02-kn-eventning.sh --nightly`)
+If you want to install the latest nightly build, use option `--nightly` (i.e. `./02-kn-eventing.sh --nightly`)
 
 ### Accessing a service
 
