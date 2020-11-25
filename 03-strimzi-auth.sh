@@ -24,7 +24,7 @@ function header_text {
 header_text "Using Strimzi Version:                  ${strimzi_version}"
 
 header_text "Strimzi install"
-kubectl create namespace kafka
+kubectl create namespace kafka || true
 kubectl -n kafka apply --selector strimzi.io/crd-install=true -f https://github.com/strimzi/strimzi-kafka-operator/releases/download/${strimzi_version}/strimzi-cluster-operator-${strimzi_version}.yaml
 curl -L "https://github.com/strimzi/strimzi-kafka-operator/releases/download/${strimzi_version}/strimzi-cluster-operator-${strimzi_version}.yaml" \
   | sed 's/namespace: .*/namespace: kafka/' \
@@ -98,41 +98,6 @@ metadata:
 spec:
   authentication:
     type: tls
-  authorization:
-    type: simple
-    acls:
-      # Example ACL rules for consuming from knative-messaging-kafka using consumer group my-group
-      - resource:
-          type: topic
-          name: "*"
-        operation: Read
-        host: "*"
-      - resource:
-          type: topic
-          name: "*"
-        operation: Describe
-        host: "*"
-      - resource:
-          type: group
-          name: "*"
-        operation: Read
-        host: "*"
-      # Example ACL rules for producing to topic knative-messaging-kafka
-      - resource:
-          type: topic
-          name: "*"
-        operation: Write
-        host: "*"
-      - resource:
-          type: topic
-          name: "*"
-        operation: Create
-        host: "*"
-      - resource:
-          type: topic
-          name: "*"
-        operation: Describe
-        host: "*"
 EOF
 
 header_text "Applying Strimzi SASL Admin User"
@@ -146,45 +111,14 @@ metadata:
 spec:
   authentication:
     type: scram-sha-512
-  authorization:
-    type: simple
-    acls:
-      # Example ACL rules for consuming from knative-messaging-kafka using consumer group my-group
-      - resource:
-          type: topic
-          name: "*"
-        operation: Read
-        host: "*"
-      - resource:
-          type: topic
-          name: "*"
-        operation: Describe
-        host: "*"
-      - resource:
-          type: group
-          name: "*"
-        operation: Read
-        host: "*"
-      # Example ACL rules for producing to topic knative-messaging-kafka
-      - resource:
-          type: topic
-          name: "*"
-        operation: Write
-        host: "*"
-      - resource:
-          type: topic
-          name: "*"
-        operation: Create
-        host: "*"
-      - resource:
-          type: topic
-          name: "*"
-        operation: Describe
-        host: "*"
 EOF
 
 header_text "Waiting for Strimzi Users to become ready"
-sleep 10
+oc wait kafkauser --all --timeout=-1s --for=condition=Ready -n kafka
+
+header_text "Deleting existing KafkaUser secrets"
+kubectl delete secret --namespace default my-tls-secret || true
+kubectl delete secret --namespace default my-sasl-secret || true
 
 header_text "Creating a Secret, containing TLS from Strimzi"
 STRIMZI_CRT=$(kubectl -n kafka get secret my-cluster-cluster-ca-cert --template='{{index .data "ca.crt"}}' | base64 --decode )
