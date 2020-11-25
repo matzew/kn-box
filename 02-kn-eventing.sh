@@ -16,6 +16,21 @@ else
 fi
 
 eventing_version="v0.19.0"
+eventing_url=https://github.com/knative/eventing/releases/download/${eventing_version}
+
+while [[ $# -ne 0 ]]; do
+   parameter=$1
+   case ${parameter} in
+     --nightly)
+        nightly=1
+        eventing_version=nightly
+        eventing_url=https://knative-nightly.storage.googleapis.com/eventing/latest
+       ;;
+     *) abort "unknown option ${parameter}" ;;
+   esac
+   shift
+ done
+
 
 function header_text {
   echo "$header$*$reset"
@@ -24,8 +39,8 @@ function header_text {
 header_text "Using Knative Eventing Version:         ${eventing_version}"
 
 header_text "Setting up Knative Eventing"
-kubectl apply --filename https://github.com/knative/eventing/releases/download/${eventing_version}/eventing.yaml
-kubectl apply --filename https://github.com/knative/eventing/releases/download/${eventing_version}/eventing-sugar-controller.yaml
+kubectl apply --filename $eventing_url/eventing.yaml
+kubectl apply --filename $eventing_url/eventing-sugar-controller.yaml
 
 header_text "Waiting for Knative Eventing to become ready"
 kubectl wait deployment --all --timeout=-1s --for=condition=Available -n knative-eventing

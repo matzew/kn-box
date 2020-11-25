@@ -15,7 +15,7 @@ The installer gets you a minikube/kind cluster:
 ./00-installer(kind).sh
 ```
 
-_**NOTE:** The scripts for the Knative components work against any Kubernetes cluster!_ 
+_**NOTE:** The scripts for the Knative components work against any Kubernetes cluster!_
 
 ### Knative Serving
 
@@ -25,6 +25,9 @@ To install the Knative Knative Serving with Kourier Ingress to the cluster invok
 ./01-kn-serving.sh
 ```
 
+This installs the latest released version of Knative serving.
+If you want to install the latest nightly build, use option `--nightly` (i.e. `./01-kn-serving.sh --nightly`)
+
 ### Knative Eventing
 
 To install the Knative Eventing components to the cluster invoke:
@@ -32,6 +35,9 @@ To install the Knative Eventing components to the cluster invoke:
 ```shell
 ./02-kn-eventing.sh
 ```
+
+This installs the latest released version of Knative eventing.
+If you want to install the latest nightly build, use option `--nightly` (i.e. `./02-kn-eventing.sh --nightly`)
 
 ### Accessing a service
 
@@ -71,6 +77,9 @@ To install the `KafkaSource` and the `KafkaChannel` CRDs, run:
 ```shell
 ./04-kn-kafka.sh
 ```
+
+This command installs the latest release of the Apache Kafka components.
+If you instead want to install the latest nightly builds use the option `--nightly` (i.e. `./04-kn-kafka.sh --nightly`).
 
 > The `KafkaChannel` in this version is currently not configured to run as a default channel!
 
