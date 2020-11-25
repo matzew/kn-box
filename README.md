@@ -78,6 +78,9 @@ To install the `KafkaSource` and the `KafkaChannel` CRDs, run:
 ./04-kn-kafka.sh
 ```
 
+This command installs the latest release of the Apache Kafka components.
+If you instead want to install the latest nightly builds use the option `--nightly` (i.e. `./04-kn-kafka.sh --nightly`).
+
 > The `KafkaChannel` in this version is currently not configured to run as a default channel!
 
 ## Enabling tracing
