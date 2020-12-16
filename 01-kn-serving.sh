@@ -16,7 +16,7 @@ else
 fi
 
 serving_version="v0.19.0"
-kourier_version="v0.19.0"
+kourier_version="v0.19.1"
 
 serving_url=https://github.com/knative/serving/releases/download/${serving_version}
 kourier_url=https://github.com/knative/net-kourier/releases/download/${kourier_version}
