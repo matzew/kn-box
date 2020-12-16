@@ -15,7 +15,7 @@ else
   reset=''
 fi
 
-eventing_kafka_version="v0.19.0"
+eventing_kafka_version="v0.19.3"
 
 function header_text {
   echo "$header$*$reset"
