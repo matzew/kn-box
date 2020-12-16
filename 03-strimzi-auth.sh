@@ -66,6 +66,7 @@ spec:
       transaction.state.log.replication.factor: 3
       transaction.state.log.min.isr: 2
       log.message.format.version: "2.6"
+      auto.create.topics.enable: "false"
     storage:
       type: jbod
       volumes:
@@ -134,4 +135,6 @@ header_text "Creating a Secret, containing SASL from Strimzi"
 SASL_PASSWD=$(kubectl -n kafka get secret my-sasl-user --template='{{index .data "password"}}' | base64 --decode )
 kubectl create secret --namespace default generic my-sasl-secret \
     --from-literal=password="$SASL_PASSWD" \
+    --from-literal=ca.crt="$STRIMZI_CRT" \
+    --from-literal=saslType="SCRAM-SHA-512" \
     --from-literal=user="my-sasl-user"
