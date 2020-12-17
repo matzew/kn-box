@@ -16,22 +16,22 @@ else
 fi
 
 strimzi_version=`curl https://github.com/strimzi/strimzi-kafka-operator/releases/latest |  awk -F 'tag/' '{print $2}' | awk -F '"' '{print $1}' 2>/dev/null`
-serving_version="v0.18.1"
-kourier_version="v0.18.0"
-eventing_version="v0.18.3"
-eventing_contrib_version="v0.18.1"
-eventing_kafka_broker_version="v0.18.1"
+serving_version="v0.19.0"
+kourier_version="v0.19.1"
+eventing_version="v0.19.3"
+eventing_kafka_version="v0.19.3"
+eventing_kafka_broker_version="v0.19.0"
 
 function header_text {
   echo "$header$*$reset"
 }
 
-header_text "Using Strimzi Version:                      ${strimzi_version}"
-header_text "Using Knative Serving Version:              ${serving_version}"
-header_text "Using Kourier Version:                      ${kourier_version}"
-header_text "Using Knative Eventing Version:             ${eventing_version}"
-header_text "Using Knative Eventing Contrib Version:     ${eventing_contrib_version}"
-header_text "Using Knative Eventing Kafka Version:       ${eventing_kafka_broker_version}"
+header_text "Using Strimzi Version:                        ${strimzi_version}"
+header_text "Using Knative Serving Version:                ${serving_version}"
+header_text "Using Kourier Version:                        ${kourier_version}"
+header_text "Using Knative Eventing Version:               ${eventing_version}"
+header_text "Using Knative Eventing Kafka Version:         ${eventing_kafka_version}"
+header_text "Using Knative Eventing Kafka-Broker Version:  ${eventing_kafka_broker_version}"
 
 header_text "Strimzi install"
 kubectl create namespace kafka
@@ -115,7 +115,7 @@ data:
 EOF
 
 header_text "Setting up Knative Apache Kafka Source"
-curl -L https://github.com/knative/eventing-contrib/releases/download/${eventing_contrib_version}/kafka-source.yaml \
+curl -L https://github.com/knative-sandbox/eventing-kafka/releases/download/${eventing_kafka_version}/source.yaml \
   | sed 's/namespace: .*/namespace: knative-eventing/' \
   | kubectl apply -f - -n knative-eventing
 
@@ -123,7 +123,7 @@ header_text "Waiting for Knative Apache Kafka Source to become ready"
 kubectl wait deployment --all --timeout=-1s --for=condition=Available -n knative-eventing
 
 header_text "Setting up Knative Apache Kafka Channel"
-curl -L "https://github.com/knative/eventing-contrib/releases/download/${eventing_contrib_version}/kafka-channel.yaml" \
+curl -L "https://github.com/knative-sandbox/eventing-kafka/releases/download/${eventing_kafka_version}/channel-consolidated.yaml" \
     | sed 's/REPLACE_WITH_CLUSTER_URL/my-cluster-kafka-bootstrap.kafka:9092/' \
     | kubectl apply --filename -
 
