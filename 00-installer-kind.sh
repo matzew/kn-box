@@ -21,7 +21,7 @@ function header_text {
 
 header_text "Starting Knative on kind!"
 
-kind create cluster
+kind create cluster --image=kindest/node:v1.20.0
 header_text "Waiting for core k8s services to initialize"
 sleep 5; while echo && kubectl get pods -n kube-system | grep -v -E "(Running|Completed|STATUS)"; do sleep 5; done
 
