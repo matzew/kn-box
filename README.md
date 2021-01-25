@@ -15,6 +15,11 @@ The installer gets you a minikube/kind cluster:
 ./00-installer(kind).sh
 ```
 
+You can specify the _Kubernetes_ version with the `K8S_IMAGE` environment variable, before call the `00-install-kind.sh`:
+```shell
+export K8S_IMAGE=kindest/node:v1.20.0
+```
+
 _**NOTE:** The scripts for the Knative components work against any Kubernetes cluster!_
 
 ### Knative Serving
