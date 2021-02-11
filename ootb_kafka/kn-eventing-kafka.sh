@@ -123,4 +123,7 @@ data:
   channelTemplateSpec: |
     apiVersion: messaging.knative.dev/v1beta1
     kind: KafkaChannel
+    spec:
+      numPartitions: 5
+      replicationFactor: 1
 EOF
