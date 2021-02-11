@@ -80,13 +80,13 @@ kubectl apply --filename https://github.com/knative/eventing/releases/download/$
 header_text "Waiting for Knative Eventing to become ready"
 kubectl wait deployment --all --timeout=-1s --for=condition=Available -n knative-eventing
 
-header_text "Setting up Knative Apache Kafka Source"
-curl -L https://github.com/knative-sandbox/eventing-kafka/releases/download/${eventing_kafka_version}/source.yaml \
-  | sed 's/namespace: .*/namespace: knative-eventing/' \
-  | kubectl apply -f - -n knative-eventing
+# header_text "Setting up Knative Apache Kafka Source"
+# curl -L https://github.com/knative-sandbox/eventing-kafka/releases/download/${eventing_kafka_version}/source.yaml \
+#   | sed 's/namespace: .*/namespace: knative-eventing/' \
+#   | kubectl apply -f - -n knative-eventing
 
-header_text "Waiting for Knative Apache Kafka Source to become ready"
-kubectl wait deployment --all --timeout=-1s --for=condition=Available -n knative-eventing
+# header_text "Waiting for Knative Apache Kafka Source to become ready"
+# kubectl wait deployment --all --timeout=-1s --for=condition=Available -n knative-eventing
 
 header_text "Setting up Knative Apache Kafka Channel"
 curl -L "https://github.com/knative-sandbox/eventing-kafka/releases/download/${eventing_kafka_version}/channel-consolidated.yaml" \
