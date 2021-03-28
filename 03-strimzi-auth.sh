@@ -25,10 +25,10 @@ header_text "Using Strimzi Version:                  ${strimzi_version}"
 
 header_text "Strimzi install"
 kubectl create namespace kafka || true
-kubectl -n kafka apply --selector strimzi.io/crd-install=true -f https://github.com/strimzi/strimzi-kafka-operator/releases/download/${strimzi_version}/strimzi-cluster-operator-${strimzi_version}.yaml
+kubectl -n kafka create --selector strimzi.io/crd-install=true -f https://github.com/strimzi/strimzi-kafka-operator/releases/download/${strimzi_version}/strimzi-cluster-operator-${strimzi_version}.yaml
 curl -L "https://github.com/strimzi/strimzi-kafka-operator/releases/download/${strimzi_version}/strimzi-cluster-operator-${strimzi_version}.yaml" \
   | sed 's/namespace: .*/namespace: kafka/' \
-  | kubectl -n kafka apply -f -
+  | kubectl -n kafka apply --selector strimzi.io/crd-install!=true -f -
 
 # Wait for the CRD we need to actually be active
 kubectl wait crd --timeout=-1s kafkas.kafka.strimzi.io --for=condition=Established
@@ -36,13 +36,13 @@ kubectl wait crd --timeout=-1s kafkas.kafka.strimzi.io --for=condition=Establish
 header_text "Applying Strimzi Cluster file"
 # kubectl -n kafka apply -f "https://raw.githubusercontent.com/strimzi/strimzi-kafka-operator/${strimzi_version}/examples/kafka/kafka-persistent-single.yaml"
 cat <<-EOF | kubectl -n kafka apply -f -
-apiVersion: kafka.strimzi.io/v1beta1
+apiVersion: kafka.strimzi.io/v1beta2
 kind: Kafka
 metadata:
   name: my-cluster
 spec:
   kafka:
-    version: 2.6.0
+    version: 2.7.0
     replicas: 3
     listeners:
       - name: plain
@@ -65,7 +65,7 @@ spec:
       offsets.topic.replication.factor: 3
       transaction.state.log.replication.factor: 3
       transaction.state.log.min.isr: 2
-      log.message.format.version: "2.6"
+      log.message.format.version: "2.7"
       auto.create.topics.enable: "false"
     storage:
       type: jbod
@@ -90,7 +90,7 @@ kubectl wait kafka --all --timeout=-1s --for=condition=Ready -n kafka
 
 header_text "Applying Strimzi TLS Admin User"
 cat <<-EOF | kubectl -n kafka apply -f -
-apiVersion: kafka.strimzi.io/v1beta1
+apiVersion: kafka.strimzi.io/v1beta2
 kind: KafkaUser
 metadata:
   name: my-tls-user
@@ -103,7 +103,7 @@ EOF
 
 header_text "Applying Strimzi SASL Admin User"
 cat <<-EOF | kubectl -n kafka apply -f -
-apiVersion: kafka.strimzi.io/v1beta1
+apiVersion: kafka.strimzi.io/v1beta2
 kind: KafkaUser
 metadata:
   name: my-sasl-user
