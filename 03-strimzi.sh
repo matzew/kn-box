@@ -36,7 +36,7 @@ kubectl wait crd --timeout=-1s kafkas.kafka.strimzi.io --for=condition=Establish
 header_text "Applying Strimzi Cluster file"
 ###kubectl -n kafka create -f "https://raw.githubusercontent.com/strimzi/strimzi-kafka-operator/${strimzi_version}/examples/kafka/kafka-persistent-single.yaml"
 cat <<-EOF | kubectl -n kafka apply -f -
-apiVersion: kafka.strimzi.io/v1beta1
+apiVersion: kafka.strimzi.io/v1beta2
 kind: Kafka
 metadata:
   name: my-cluster
