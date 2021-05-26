@@ -1,10 +1,10 @@
-apiVersion: sources.knative.dev/v1alpha2
+apiVersion: sources.knative.dev/v1
 kind: PingSource
 metadata:
   name: ping-source-broker
 spec:
   schedule: "*/1 * * * *"
-  jsonData: '{"message": "Hello world!"}'
+  data: '{"message": "Hello world!"}'
   sink:
     ref:
       apiVersion: eventing.knative.dev/v1
