@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-export K8S_IMAGE="${K8S_IMAGE:-kindest/node:v1.20.2}"
+export K8S_IMAGE="${K8S_IMAGE:-kindest/node:v1.21.1}"
 
 set -e
 
