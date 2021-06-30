@@ -16,11 +16,11 @@ else
 fi
 
 strimzi_version=`curl https://github.com/strimzi/strimzi-kafka-operator/releases/latest |  awk -F 'tag/' '{print $2}' | awk -F '"' '{print $1}' 2>/dev/null`
-serving_version="v0.22.0"
-kourier_version="v0.22.0"
-eventing_version="v0.22.0"
-eventing_kafka_version="v0.22.0"
-eventing_kafka_broker_version="v0.22.0"
+serving_version="v0.24.0"
+kourier_version="v0.24.0"
+eventing_version="v0.24.0"
+eventing_kafka_version="v0.24.0"
+eventing_kafka_broker_version="v0.24.0"
 
 function header_text {
   echo "$header$*$reset"
@@ -33,17 +33,17 @@ header_text "Using Knative Eventing Version:               ${eventing_version}"
 header_text "Using Knative Eventing Kafka Version:         ${eventing_kafka_version}"
 header_text "Using Knative Eventing Kafka-Broker Version:  ${eventing_kafka_broker_version}"
 
-# header_text "Strimzi install"
-# kubectl create namespace kafka
-# kubectl -n kafka apply --selector strimzi.io/crd-install=true -f https://github.com/strimzi/strimzi-kafka-operator/releases/download/${strimzi_version}/strimzi-cluster-operator-${strimzi_version}.yaml
-# curl -L "https://github.com/strimzi/strimzi-kafka-operator/releases/download/${strimzi_version}/strimzi-cluster-operator-${strimzi_version}.yaml" \
-#   | sed 's/namespace: .*/namespace: kafka/' \
-#   | kubectl -n kafka apply -f -
+header_text "Strimzi install"
+kubectl create namespace kafka
+kubectl -n kafka apply --selector strimzi.io/crd-install=true -f https://github.com/strimzi/strimzi-kafka-operator/releases/download/${strimzi_version}/strimzi-cluster-operator-${strimzi_version}.yaml
+curl -L "https://github.com/strimzi/strimzi-kafka-operator/releases/download/${strimzi_version}/strimzi-cluster-operator-${strimzi_version}.yaml" \
+  | sed 's/namespace: .*/namespace: kafka/' \
+  | kubectl -n kafka apply -f -
 
-# header_text "Applying Strimzi Cluster file"
-# kubectl -n kafka apply -f "https://raw.githubusercontent.com/strimzi/strimzi-kafka-operator/${strimzi_version}/examples/kafka/kafka-persistent-single.yaml"
-# header_text "Waiting for Strimzi to become ready"
-# kubectl wait deployment --all --timeout=-1s --for=condition=Available -n kafka
+header_text "Applying Strimzi Cluster file"
+kubectl -n kafka apply -f "https://raw.githubusercontent.com/strimzi/strimzi-kafka-operator/${strimzi_version}/examples/kafka/kafka-persistent-single.yaml"
+header_text "Waiting for Strimzi to become ready"
+kubectl wait deployment --all --timeout=-1s --for=condition=Available -n kafka
 
 header_text "Setting up Knative Serving"
 
@@ -81,20 +81,20 @@ kubectl wait deployment --all --timeout=-1s --for=condition=Available -n knative
 
 header_text "Setting up Knative Kafka Broker"
 
-kubectl apply --filename https://knative-nightly.storage.googleapis.com/eventing-kafka-broker/latest/eventing-kafka-controller.yaml
-kubectl apply --filename https://knative-nightly.storage.googleapis.com/eventing-kafka-broker/latest/eventing-kafka-broker.yaml
+# kubectl apply --filename https://knative-nightly.storage.googleapis.com/eventing-kafka-broker/latest/eventing-kafka-controller.yaml
+# kubectl apply --filename https://knative-nightly.storage.googleapis.com/eventing-kafka-broker/latest/eventing-kafka-broker.yaml
 
-# kubectl apply --filename https://github.com/knative-sandbox/eventing-kafka-broker/releases/download/${eventing_kafka_broker_version}/eventing-kafka-controller.yaml
-# kubectl apply --filename https://github.com/knative-sandbox/eventing-kafka-broker/releases/download/${eventing_kafka_broker_version}/eventing-kafka-broker.yaml
+kubectl apply --filename https://github.com/knative-sandbox/eventing-kafka-broker/releases/download/${eventing_kafka_broker_version}/eventing-kafka-controller.yaml
+kubectl apply --filename https://github.com/knative-sandbox/eventing-kafka-broker/releases/download/${eventing_kafka_broker_version}/eventing-kafka-broker.yaml
 header_text "Waiting for Knative Kafka Broker to become ready"
 kubectl wait deployment --all --timeout=-1s --for=condition=Available -n knative-eventing
 
 
-kubectl create secret --namespace default generic strimzi-sasl-secret \
-    --from-literal=protocol="SASL_SSL" \
-    --from-literal=sasl.mechanism="SCRAM-SHA-512" \
-    --from-literal=user="srvc-acct-e6423ca2-de9b-4e5b-a5a4-718dd256d7c6" \
-    --from-literal=password="61093272-3a2e-4da4-b0a0-cb44f2ee8b0d"
+# kubectl create secret --namespace default generic strimzi-sasl-secret \
+#     --from-literal=protocol="SASL_SSL" \
+#     --from-literal=sasl.mechanism="SCRAM-SHA-512" \
+#     --from-literal=user="srvc-acct-e6423ca2-de9b-4e5b-a5a4-718dd256d7c6" \
+#     --from-literal=password="61093272-3a2e-4da4-b0a0-cb44f2ee8b0d"
 
 ## Setting the Kafka broker as default:
 cat <<-EOF | kubectl apply -f -
