@@ -93,8 +93,8 @@ kubectl wait deployment --all --timeout=-1s --for=condition=Available -n knative
 # kubectl create secret --namespace default generic strimzi-sasl-secret \
 #     --from-literal=protocol="SASL_SSL" \
 #     --from-literal=sasl.mechanism="SCRAM-SHA-512" \
-#     --from-literal=user="srvc-acct-e6423ca2-de9b-4e5b-a5a4-718dd256d7c6" \
-#     --from-literal=password="61093272-3a2e-4da4-b0a0-cb44f2ee8b0d"
+#     --from-literal=user="king-john" \
+#     --from-literal=password="some-password"
 
 ## Setting the Kafka broker as default:
 cat <<-EOF | kubectl apply -f -
