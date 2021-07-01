@@ -90,12 +90,6 @@ header_text "Waiting for Knative Kafka Broker to become ready"
 kubectl wait deployment --all --timeout=-1s --for=condition=Available -n knative-eventing
 
 
-# kubectl create secret --namespace default generic strimzi-sasl-secret \
-#     --from-literal=protocol="SASL_SSL" \
-#     --from-literal=sasl.mechanism="SCRAM-SHA-512" \
-#     --from-literal=user="king-john" \
-#     --from-literal=password="some-password"
-
 ## Setting the Kafka broker as default:
 cat <<-EOF | kubectl apply -f -
 apiVersion: v1
