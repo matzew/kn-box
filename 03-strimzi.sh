@@ -42,7 +42,7 @@ metadata:
   name: my-cluster
 spec:
   kafka:
-    version: 2.7.0
+    version: 2.8.0
     replicas: 3
     listeners:
       - name: plain
