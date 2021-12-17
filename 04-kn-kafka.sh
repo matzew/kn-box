@@ -15,7 +15,7 @@ else
   reset=''
 fi
 
-eventing_kafka_version="v1.0.0"
+eventing_kafka_version="v1.1.0"
 eventing_kafka_url=https://github.com/knative-sandbox/eventing-kafka/releases/download/knative-${eventing_kafka_version}
 
 while [[ $# -ne 0 ]]; do
