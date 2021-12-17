@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-export K8S_IMAGE="${K8S_IMAGE:-kindest/node:v1.21.1}"
+#export K8S_IMAGE="${K8S_IMAGE:-kindest/node:v1.21.1}"
 
 set -e
 
@@ -24,7 +24,7 @@ function header_text {
 header_text "Starting Knative on kind!"
 
 export KIND_EXPERIMENTAL_PROVIDER=podman
-kind create cluster --image=${K8S_IMAGE}
+kind create cluster # --image=${K8S_IMAGE}
 header_text "Waiting for core k8s services to initialize"
 kubectl cluster-info --context kind-kind
 sleep 5; while echo && kubectl get pods -n kube-system | grep -v -E "(Running|Completed|STATUS)"; do sleep 5; done
