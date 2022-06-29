@@ -23,7 +23,9 @@ function header_text {
 
 header_text "Starting Knative on kind!"
 
-export KIND_EXPERIMENTAL_PROVIDER=podman
+if [ $(uname) != "Darwin" ]; then
+    export KIND_EXPERIMENTAL_PROVIDER=podman
+fi
 kind create cluster # --image=${K8S_IMAGE}
 header_text "Waiting for core k8s services to initialize"
 kubectl cluster-info --context kind-kind

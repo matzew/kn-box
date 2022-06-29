@@ -15,7 +15,7 @@ else
   reset=''
 fi
 
-eventing_version="v1.1.0"
+eventing_version="v1.5.1"
 eventing_url=https://github.com/knative/eventing/releases/download/knative-${eventing_version}
 
 while [[ $# -ne 0 ]]; do
@@ -40,7 +40,7 @@ header_text "Using Knative Eventing Version:         ${eventing_version}"
 
 header_text "Setting up Knative Eventing"
 kubectl apply --filename $eventing_url/eventing.yaml
-kubectl apply --filename $eventing_url/eventing-sugar-controller.yaml
+#kubectl apply --filename $eventing_url/eventing-sugar-controller.yaml
 
 header_text "Waiting for Knative Eventing to become ready"
 kubectl wait deployment --all --timeout=-1s --for=condition=Available -n knative-eventing
