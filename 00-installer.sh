@@ -15,7 +15,7 @@ else
   reset=''
 fi
 
-kube_version="v1.23.6"
+kube_version="v1.25.9"
 
 MEMORY="$(minikube config view | awk '/memory/ { print $3 }')"
 CPUS="$(minikube config view | awk '/cpus/ { print $3 }')"
