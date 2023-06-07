@@ -17,10 +17,18 @@ fi
 
 kube_version="v1.25.9"
 
-MEMORY="$(minikube config view | awk '/memory/ { print $3 }')"
-CPUS="$(minikube config view | awk '/cpus/ { print $3 }')"
-DISKSIZE="$(minikube config view | awk '/disk-size/ { print $3 }')"
-DRIVER="$(minikube config view | awk '/driver/ { print $3 }')"
+if [ -z "$MEMORY" ]; then
+  MEMORY="$(minikube config view | awk '/memory/ { print $3 }')"
+fi
+if [ -z "$CPUS" ]; then
+  CPUS="$(minikube config view | awk '/cpus/ { print $3 }')"
+fi
+if [ -z "$DISKSIZE" ]; then
+  DISKSIZE="$(minikube config view | awk '/disk-size/ { print $3 }')"
+fi
+if [ -z "$DRIVER" ]; then
+  DRIVER="$(minikube config view | awk '/driver/ { print $3 }')"
+fi
 
 function header_text {
   echo "$header$*$reset"
