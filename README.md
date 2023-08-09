@@ -20,6 +20,12 @@ You can specify the _Kubernetes_ version with the `K8S_IMAGE` environment variab
 export K8S_IMAGE=kindest/node:v1.20.0
 ```
 
+You can also specify the cpus, memory, disk size, and driver of the vm with the `CPUS`, `MEMORY`, `DISKSIZE`, and `DRIVER` environment
+variables. For example, to specify 6 cpus in the vm:
+```shell
+CPUS=6 ./00-installer.sh
+```
+
 _**NOTE:** The scripts for the Knative components work against any Kubernetes cluster!_
 
 ### Knative Serving
