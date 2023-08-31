@@ -42,7 +42,7 @@ metadata:
   name: my-cluster
 spec:
   kafka:
-    version: 3.0.0
+    version: 3.5.1
     replicas: 3
     listeners:
       - name: plain
@@ -53,17 +53,12 @@ spec:
         port: 9093
         type: internal
         tls: true
-      - name: external
-        port: 9094
-        type: nodeport
-        tls: false
     config:
       offsets.topic.replication.factor: 3
       transaction.state.log.replication.factor: 3
       transaction.state.log.min.isr: 2
-      log.message.format.version: "3.0"
-      inter.broker.protocol.version: "3.0"
-      auto.create.topics.enable: "true"
+      default.replication.factor: 3
+      inter.broker.protocol.version: "3.5"
     storage:
       type: jbod
       volumes:
