@@ -19,7 +19,7 @@ serving_version="v1.11.0"
 kourier_version="v1.11.1"
 
 serving_url=https://github.com/knative/serving/releases/download/knative-${serving_version}
-kourier_url=https://github.com/knative/net-kourier/releases/download/knative-${kourier_version}
+kourier_url=https://github.com/knative-extensions/net-kourier/releases/download/knative-${kourier_version}
 
 while [[ $# -ne 0 ]]; do
    parameter=$1
