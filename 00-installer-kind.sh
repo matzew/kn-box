@@ -21,7 +21,7 @@ function header_text {
 
 header_text "Starting Knative on kind!"
 
-export K8S_IMAGE="${K8S_IMAGE:-kindest/node:v1.26.0}"
+export K8S_IMAGE="${K8S_IMAGE:-kindest/node:v1.27.4}"
 
 if [ $(uname) != "Darwin" ]; then
     export KIND_EXPERIMENTAL_PROVIDER=podman
