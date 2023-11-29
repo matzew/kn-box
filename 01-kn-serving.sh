@@ -15,12 +15,12 @@ else
   reset=''
 fi
 
-serving_version="v1.12.0"
-kourier_version="v1.12.0"
+serving_version="v1.12.2"
+kourier_version="v1.12.1"
 istio_version="v1.12.0"
 serving_url=https://github.com/knative/serving/releases/download/knative-${serving_version}
-kourier_url=https://github.com/knative/net-kourier/releases/download/knative-${kourier_version}
-istio_url=https://github.com/knative/net-istio/releases/download/knative-${istio_version}
+kourier_url=https://github.com/knative-extensions/net-kourier/releases/download/knative-${kourier_version}
+istio_url=https://github.com/knative-extensions/net-istio/releases/download/knative-${istio_version}
 mode="kourier"
 
 while [[ $# -ne 0 ]]; do
@@ -30,9 +30,9 @@ while [[ $# -ne 0 ]]; do
         nightly=1
         serving_version=nightly
         serving_url=https://knative-nightly.storage.googleapis.com/serving/latest
-        net_version=nightly
-        net_url=https://knative-nightly.storage.googleapis.com/net-kourier/latest/kourier.yaml
-       ;;
+        kourier_version=nightly
+        kourier_url=https://knative-nightly.storage.googleapis.com/net-kourier/latest/kourier.yaml
+        ;;
      --istio)
         mode="istio"
         ;;
@@ -62,8 +62,10 @@ header_text "Waiting for Knative Serving to become ready"
 kubectl wait deployment --all --timeout=-1s --for=condition=Available -n knative-serving
 
 if [ $mode == "kourier" ]; then
-  header_text="Using Kourier Version:       	       ${kourier_version}"
-  header_text "Waiting for Kourier to become ready"
+  header_text "Using Kourier Version:                 ${kourier_version}"
+  kubectl apply -f $kourier_url/kourier.yaml
+  
+  header_text "Waiting for Kourier to become ready" 
   kubectl wait deployment --all --timeout=-1s --for=condition=Available -n kourier-system
 
   header_text "Configure Knative Serving to use the proper 'ingress.class' from Kourier"
@@ -75,7 +77,7 @@ if [ $mode == "kourier" ]; then
 fi
 
 if [ $mode == "istio" ]; then
-  header_text="Using Istio Version:       	       ${istio_version}"
+  header_text="Using Istio Version:               ${istio_version}"
   kubectl apply -l knative.dev/crd-install=true -f $istio_url/istio.yaml
   kubectl apply -f $istio_url/istio.yaml
   kubectl apply -f $istio_url/net-istio.yaml
@@ -91,3 +93,4 @@ if [ $mode == "istio" ]; then
   header_text "Install Cert Manager"
   kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/$cert_manager_version/cert-manager.yaml
 fi
+
