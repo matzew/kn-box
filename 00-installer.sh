@@ -16,6 +16,7 @@ else
 fi
 
 kube_version="v1.27.4"
+# kube_version="v1.24.6"
 
 if [ -z "$MEMORY" ]; then
   MEMORY="$(minikube config view | awk '/memory/ { print $3 }')"
@@ -36,6 +37,6 @@ function header_text {
 
 header_text "Starting minikube with Kubernetes Version:               ${kube_version}"
 
-minikube start --memory="${MEMORY:-12288}" --cpus="${CPUS:-8}" --kubernetes-version="${kube_version}" --driver="${DRIVER:-kvm2}" --disk-size="${DISKSIZE:-30g}" --extra-config=apiserver.enable-admission-plugins="LimitRanger,NamespaceExists,NamespaceLifecycle,ResourceQuota,ServiceAccount,DefaultStorageClass,MutatingAdmissionWebhook" --addons registry
+minikube start --memory="${MEMORY:-15986}" --cpus="${CPUS:-10}" --kubernetes-version="${kube_version}" --driver="${DRIVER:-kvm2}" --disk-size="${DISKSIZE:-30g}" --extra-config=apiserver.enable-admission-plugins="LimitRanger,NamespaceExists,NamespaceLifecycle,ResourceQuota,ServiceAccount,DefaultStorageClass,MutatingAdmissionWebhook" --addons registry
 header_text "Waiting for core k8s services to initialize"
 sleep 5; while echo && kubectl get pods -n kube-system | grep -v -E "(Running|Completed|STATUS)"; do sleep 5; done
