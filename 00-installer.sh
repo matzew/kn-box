@@ -15,8 +15,7 @@ else
   reset=''
 fi
 
-kube_version="v1.27.4"
-# kube_version="v1.24.6"
+kube_version="v1.29.1"
 
 if [ -z "$MEMORY" ]; then
   MEMORY="$(minikube config view | awk '/memory/ { print $3 }')"
