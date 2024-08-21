@@ -15,9 +15,9 @@ else
   reset=''
 fi
 
-serving_version="v1.14.0"
-kourier_version="v1.14.0"
-istio_version="v1.14.0"
+serving_version="v1.15.2"
+kourier_version="v1.15.1"
+istio_version="v1.15.1"
 serving_url=https://github.com/knative/serving/releases/download/knative-${serving_version}
 kourier_url=https://github.com/knative-extensions/net-kourier/releases/download/knative-${kourier_version}
 istio_url=https://github.com/knative-extensions/net-istio/releases/download/knative-${istio_version}
